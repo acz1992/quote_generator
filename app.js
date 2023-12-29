@@ -16,19 +16,21 @@ class QuoteApp {
 			"DOMContentLoaded",
 			this.updatePageWithQuote.bind(this)
 		);
+
+		this.dataSources = [typeFitDataSource, trumpDataSource];
+	}
+
+	getRandomDataSource() {
+		return this.dataSources[
+			Math.floor(Math.random() * this.dataSources.lngth)
+		];
 	}
 
 	async getRandomQuote() {
-		const httpResult = await fetch("http://type.fit/api/quotes");
-		const jsonData = await httpResult.json();
-		const result = jsonData[Math.floor(Math.random() * jsonData.length)];
-		const quote = {
-			quote: result.text,
-			author: result.author,
-			source: "TypeFit",
-		};
-		console.log(quote);
-		return quote;
+		const dataSource = this.dataSources[0];
+		const quote = await dataSource.getQuote();
+
+		return { ...quote, source: dataSource.name };
 	}
 	async updatePageWithQuote() {
 		const randomQuoteResult = await this.getRandomQuote();

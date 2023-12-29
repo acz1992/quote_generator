@@ -4,6 +4,7 @@ Idea Story
 Technologies used: CSS, HTML, Vanilla Javascript
 
 Concepts:
--JS Cosntructors
+-JS Constructors
+-Randomised calls from multiple api sources
 
 APIs: -https://type.fit/api/quotes
