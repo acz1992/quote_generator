@@ -1,6 +1,13 @@
+:root {
+	--background-color: #fff;
+	--transitionSpeed: 1s;
+}
+
 body {
 	font-family: Verdana, Geneva, Tahoma, sans-serif;
 	margin: 4rem;
+	background-color: var(--background-color);
+	transition: background-color var(--transitionSpeed);
 }
 
 section#quoteDisplay {
@@ -8,6 +15,15 @@ section#quoteDisplay {
 	margin: 0 2rem;
 	padding: 2rem;
 	color: black;
+	transition: color var(--transitionSpeed);
+}
+
+section#quoteDisplay.loading {
+	color: whitesmoke;
+}
+
+section#quoteDisplay.loading {
+	color: whitesmoke;
 }
 
 section#quoteDisplay blockquote {
