@@ -46,6 +46,7 @@ class QuoteApp {
 	}
 	async updatePageWithQuote() {
 		this.quoteSection.classList.add("loading");
+		this.quoteBtn.setAttribute("disabled", "disabled");
 
 		const randomQuoteResult = await this.getRandomQuote();
 		const { quote, author = "Unknown", source } = randomQuoteResult;
@@ -61,6 +62,7 @@ Source: ${source}
 
 			this.setRandomBackgroundColour();
 			this.quoteSection.classList.remove("loading");
+			this.quoteBtn.removeAttribute("disabled");
 		}, 1000);
 	}
 
