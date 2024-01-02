@@ -21,7 +21,7 @@ const quotes = [
 	},
 ];
 
-const customQuoteSource = {
+const customQuoteSources = {
 	name: "Internal App Array",
 	getQuote: () =>
 		new Promise((resolve, reject) => {

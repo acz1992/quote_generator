@@ -25,7 +25,7 @@ class QuoteApp {
 		this.dataSources = [
 			typeFitDataSource,
 			trumpDataSource,
-			customQuoteSource,
+			customQuoteSources,
 		];
 
 		this.tweetBtn = document.getElementById("tweetQuoteBtn");
@@ -33,22 +33,53 @@ class QuoteApp {
 	}
 
 	getRandomDataSource() {
-		return this.dataSources[
-			Math.floor(Math.random() * this.dataSources.length)
-		];
+		const dataSource =
+			this.dataSources[
+				Math.floor(Math.random() * this.dataSources.length)
+			];
+
+		// Check for internet connectivity error and return custom data source
+		if (
+			(dataSource === trumpDataSource ||
+				dataSource === typeFitDataSource) &&
+			navigator.onLine === false
+		) {
+			console.error("Internet connection is not available.");
+			return customQuoteSources;
+		}
+
+		return dataSource;
 	}
 
-	async getRandomQuote() {
-		const dataSource = this.getRandomDataSource();
-		const quote = await dataSource.getQuote();
+	async getRandomQuote(source) {
+		const dataSource = source || this.getRandomDataSource();
+		try {
+			const quote = await dataSource.getQuote();
 
-		return { ...quote, source: dataSource.name };
+			// Check if the quote is not available or doesn't have necessary properties
+			if (!quote || !quote.quote || !quote.author) {
+				throw new Error("Invalid quote structure");
+			}
+
+			return { ...quote, source: dataSource.name };
+		} catch (error) {
+			throw new Error("Error fetching quote from data source");
+		}
 	}
+
 	async updatePageWithQuote() {
 		this.quoteSection.classList.add("loading");
 		this.quoteBtn.setAttribute("disabled", "disabled");
 
-		const randomQuoteResult = await this.getRandomQuote();
+		let randomQuoteResult;
+		try {
+			randomQuoteResult = await this.getRandomQuote();
+		} catch (error) {
+			console.log(error);
+			randomQuoteResult = await this.getRandomDataSource(
+				customQuoteSources
+			);
+		}
 		const { quote, author = "Unknown", source } = randomQuoteResult;
 		this.quoteForSharing = `"${quote}"
 -  ${author}
